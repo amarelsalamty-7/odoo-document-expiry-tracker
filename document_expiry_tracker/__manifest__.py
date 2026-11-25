@@ -1,0 +1,31 @@
+{
+    'name': 'Document Expiry Tracker',
+    'version': '19.0.1.0.0',
+    'category': 'Operations',
+    'summary': 'Manage documents and track expiration dates',
+    'license': 'LGPL-3',
+    'depends': ['base', 'mail'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/document_sequence.xml',
+        'views/document_type_views.xml',
+        'views/document_tracker_views.xml',
+        'views/document_tracker_search_views.xml',
+        'views/document_renewal_views.xml',
+        'views/document_renewal_history_views.xml',
+        'views/document_tracker_report_views.xml',
+        'views/document_renewal_report_views.xml',
+        'views/document_dashboard_menus.xml',
+        'views/document_dashboard_action.xml',
+        'views/document_cron.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'document_expiry_tracker/static/src/js/document_dashboard.js',
+            'document_expiry_tracker/static/src/xml/document_dashboard.xml',
+            'document_expiry_tracker/static/src/scss/document_dashboard.scss',
+        ],
+    },
+    'installable': True,
+    'application': True,
+}

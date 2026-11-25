@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Dashboard -->
+    <menuitem id="menu_document_dashboard_root"
+              name="Dashboard"
+              parent="menu_document_root"
+              sequence="45"/>
+
+    <menuitem id="menu_document_dashboard_documents"
+              name="Documents Overview"
+              parent="menu_document_dashboard_root"
+              action="action_document_dashboard"
+              sequence="10"/>
+
+    <menuitem id="menu_document_dashboard_renewals"
+              name="Renewals Overview"
+              parent="menu_document_dashboard_root"
+              action="action_document_renewal_dashboard"
+              sequence="20"/>
+
+    <!-- Reports -->
+    <menuitem id="menu_document_reports_root"
+              name="Reports"
+              parent="menu_document_root"
+              sequence="50"/>
+
+    <menuitem id="menu_document_report_status"
+              name="Documents by Status"
+              parent="menu_document_reports_root"
+              action="action_document_report_status"
+              sequence="10"/>
+
+    <menuitem id="menu_document_report_type"
+              name="Documents by Type"
+              parent="menu_document_reports_root"
+              action="action_document_report_type"
+              sequence="20"/>
+
+    <menuitem id="menu_document_report_responsible"
+              name="Documents by Responsible"
+              parent="menu_document_reports_root"
+              action="action_document_report_responsible"
+              sequence="30"/>
+
+    <menuitem id="menu_document_report_renewals"
+              name="Renewals by Status"
+              parent="menu_document_reports_root"
+              action="action_document_renewal_report"
+              sequence="40"/>
+
+    <!-- Ready-made filters -->
+    <menuitem id="menu_document_filters_root"
+              name="Quick Filters"
+              parent="menu_document_root"
+              sequence="60"/>
+
+    <menuitem id="menu_document_filter_expired"
+              name="Expired Documents"
+              parent="menu_document_filters_root"
+              action="action_document_expired"
+              sequence="10"/>
+
+    <menuitem id="menu_document_filter_expiring"
+              name="Expiring Soon"
+              parent="menu_document_filters_root"
+              action="action_document_expiring"
+              sequence="20"/>
+
+    <menuitem id="menu_document_filter_active"
+              name="Active Documents"
+              parent="menu_document_filters_root"
+              action="action_document_active"
+              sequence="30"/>
+
+    <menuitem id="menu_document_filter_pending"
+              name="Pending Approval Renewals"
+              parent="menu_document_filters_root"
+              action="action_document_renewal_pending"
+              sequence="40"/>
+
+</odoo>

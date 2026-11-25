@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_document_dashboard_client" model="ir.actions.client">
+        <field name="name">Document Dashboard</field>
+        <field name="tag">document_expiry_dashboard</field>
+    </record>
+
+    <menuitem id="menu_document_dashboard_main"
+              name="Executive Dashboard"
+              parent="menu_document_dashboard_root"
+              action="action_document_dashboard_client"
+              sequence="1"/>
+
+</odoo>

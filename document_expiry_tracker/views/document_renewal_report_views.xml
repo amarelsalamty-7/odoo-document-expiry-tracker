@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extra filters on the existing renewal search view -->
+    <record id="view_document_renewal_search_dashboard" model="ir.ui.view">
+        <field name="name">document.renewal.search.dashboard</field>
+        <field name="model">document.renewal</field>
+        <field name="inherit_id" ref="view_document_renewal_search"/>
+        <field name="arch" type="xml">
+            <filter name="my_requests" position="after">
+                <filter name="filter_in_progress"
+                        string="In Progress"
+                        domain="[('state', '=', 'in_progress')]"/>
+                <filter name="filter_pending"
+                        string="Pending Approval"
+                        domain="[('state', '=', 'waiting_approval')]"/>
+                <filter name="filter_completed"
+                        string="Completed"
+                        domain="[('state', '=', 'completed')]"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- Kanban (dashboard: one column per state, count shown in header) -->
+    <record id="view_document_renewal_kanban" model="ir.ui.view">
+        <field name="name">document.renewal.kanban</field>
+        <field name="model">document.renewal</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state"
+                    records_draggable="0"
+                    group_create="0"
+                    group_edit="0"
+                    group_delete="0"
+                    quick_create="0"
+                    sample="1">
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <field name="name" class="fw-bold fs-5"/>
+                        <div class="text-muted">
+                            <field name="document_id"/>
+                        </div>
+                        <div>
+                            New expiry: <field name="new_expiry_date"/>
+                        </div>
+                        <field name="responsible_id"
+                               widget="many2one_avatar_user"
+                               class="mt-1"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Graph -->
+    <record id="view_document_renewal_graph" model="ir.ui.view">
+        <field name="name">document.renewal.graph</field>
+        <field name="model">document.renewal</field>
+        <field name="arch" type="xml">
+            <graph string="Renewal Requests" type="bar" sample="1">
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot -->
+    <record id="view_document_renewal_pivot" model="ir.ui.view">
+        <field name="name">document.renewal.pivot</field>
+        <field name="model">document.renewal</field>
+        <field name="arch" type="xml">
+            <pivot string="Renewal Requests" sample="1">
+                <field name="responsible_id" type="row"/>
+                <field name="state" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Dashboard action -->
+    <record id="action_document_renewal_dashboard" model="ir.actions.act_window">
+        <field name="name">Renewals Overview</field>
+        <field name="res_model">document.renewal</field>
+        <field name="view_mode">kanban,graph,pivot,list,form</field>
+        <field name="search_view_id" ref="view_document_renewal_search"/>
+    </record>
+
+    <!-- Report -->
+    <record id="action_document_renewal_report" model="ir.actions.act_window">
+        <field name="name">Renewals by Status</field>
+        <field name="res_model">document.renewal</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_document_renewal_search"/>
+        <field name="context">{'search_default_group_by_state': 1}</field>
+    </record>
+
+    <!-- Ready-made filter -->
+    <record id="action_document_renewal_pending" model="ir.actions.act_window">
+        <field name="name">Pending Approval</field>
+        <field name="res_model">document.renewal</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_document_renewal_search"/>
+        <field name="context">{'search_default_filter_pending': 1}</field>
+    </record>
+
+</odoo>

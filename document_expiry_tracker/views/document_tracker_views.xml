@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Search View -->
+    <record id="view_document_tracker_search" model="ir.ui.view">
+        <field name="name">document.tracker.search</field>
+        <field name="model">document.tracker</field>
+        <field name="arch" type="xml">
+            <search string="Documents">
+                <field name="name"/>
+                <field name="document_number"/>
+                <field name="document_type_id"/>
+                <field name="related_party_id"/>
+                <field name="responsible_id"/>
+
+                <filter name="expired"
+                        string="Expired"
+                        domain="[('expiry_date', '&lt;', context_today())]"/>
+
+                <group>
+                    <filter name="group_by_type"
+                            string="Document Type"
+                            context="{'group_by': 'document_type_id'}"/>
+
+                    <filter name="group_by_responsible"
+                            string="Responsible User"
+                            context="{'group_by': 'responsible_id'}"/>
+
+                    <filter name="group_by_company"
+                            string="Company"
+                            context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_document_tracker_list" model="ir.ui.view">
+        <field name="name">document.tracker.list</field>
+        <field name="model">document.tracker</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="document_number"/>
+                <field name="document_type_id"/>
+                <field name="related_party_id"/>
+                <field name="expiry_date"/>
+                <field name="days_remaining"/>
+                <field name="status"/>
+                <field name="responsible_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_document_tracker_form" model="ir.ui.view">
+        <field name="name">document.tracker.form</field>
+        <field name="model">document.tracker</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+
+                    <!-- Smart Buttons -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_renewal_history"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-history">
+                            <field name="renewal_history_count"
+                                   widget="statinfo"
+                                   string="Renewals"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Document Information">
+                            <field name="document_type_id"/>
+                            <field name="document_number"/>
+                            <field name="related_party_id"/>
+                            <field name="company_id"/>
+                        </group>
+
+                        <group string="Dates and Responsibility">
+                            <field name="issue_date"/>
+                            <field name="expiry_date"/>
+                            <field name="responsible_id"/>
+                            <field name="status"/>
+                            <field name="days_remaining"/>
+                        </group>
+                    </group>
+
+                    <group string="Attachment">
+                        <field name="attachment"
+                               filename="attachment_filename"/>
+                        <field name="attachment_filename"
+                               invisible="1"/>
+                    </group>
+
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_document_tracker" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">document.tracker</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id"
+               ref="view_document_tracker_search"/>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_document_records"
+              name="Documents"
+              parent="menu_document_root"
+              action="action_document_tracker"
+              sequence="20"/>
+
+</odoo>

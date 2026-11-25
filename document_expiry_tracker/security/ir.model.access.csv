@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_document_type_user,access.document.type.user,model_document_type,base.group_user,1,1,1,1
+access_document_tracker_user,access.document.tracker.user,model_document_tracker,base.group_user,1,1,1,1
+access_document_renewal_user,access.document.renewal.user,model_document_renewal,base.group_user,1,1,1,1
+access_document_renewal_history_user,access.document.renewal.history.user,model_document_renewal_history,base.group_user,1,0,0,0

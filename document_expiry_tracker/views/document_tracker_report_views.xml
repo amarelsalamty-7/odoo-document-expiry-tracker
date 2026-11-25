@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Kanban (dashboard: one column per status, count shown in header) -->
+    <record id="view_document_tracker_kanban" model="ir.ui.view">
+        <field name="name">document.tracker.kanban</field>
+        <field name="model">document.tracker</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="status"
+                    records_draggable="0"
+                    group_create="0"
+                    group_edit="0"
+                    group_delete="0"
+                    quick_create="0"
+                    sample="1">
+                <field name="status"/>
+                <field name="days_remaining"/>
+                <templates>
+                    <t t-name="card">
+                        <field name="name" class="fw-bold fs-5"/>
+                        <div class="text-muted">
+                            <field name="document_type_id"/>
+                        </div>
+                        <div>
+                            Expires: <field name="expiry_date"/>
+                        </div>
+
+                        <!-- Remaining time: color and wording depend on the situation -->
+                        <div t-if="record.days_remaining.raw_value &lt; 0"
+                             class="text-danger fw-bold">
+                            Expired <t t-out="-record.days_remaining.raw_value"/> day(s) ago
+                        </div>
+                        <div t-elif="record.days_remaining.raw_value == 0"
+                             class="text-danger fw-bold">
+                            Expires today
+                        </div>
+                        <div t-elif="record.days_remaining.raw_value &lt;= 30"
+                             class="text-warning fw-bold">
+                            <t t-out="record.days_remaining.raw_value"/> day(s) remaining
+                        </div>
+                        <div t-else="" class="text-success">
+                            <t t-out="record.days_remaining.raw_value"/> day(s) remaining
+                        </div>
+
+                        <field name="responsible_id"
+                               widget="many2one_avatar_user"
+                               class="mt-1"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Graph -->
+    <record id="view_document_tracker_graph" model="ir.ui.view">
+        <field name="name">document.tracker.graph</field>
+        <field name="model">document.tracker</field>
+        <field name="arch" type="xml">
+            <graph string="Documents" type="bar" sample="1">
+                <field name="status"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot -->
+    <record id="view_document_tracker_pivot" model="ir.ui.view">
+        <field name="name">document.tracker.pivot</field>
+        <field name="model">document.tracker</field>
+        <field name="arch" type="xml">
+            <pivot string="Documents" sample="1">
+                <field name="document_type_id" type="row"/>
+                <field name="status" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Dashboard action -->
+    <record id="action_document_dashboard" model="ir.actions.act_window">
+        <field name="name">Documents Overview</field>
+        <field name="res_model">document.tracker</field>
+        <field name="view_mode">kanban,graph,pivot,list,form</field>
+        <field name="search_view_id" ref="view_document_tracker_search"/>
+    </record>
+
+    <!-- Reports -->
+    <record id="action_document_report_status" model="ir.actions.act_window">
+        <field name="name">Documents by Status</field>
+        <field name="res_model">document.tracker</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_document_tracker_search"/>
+        <field name="context">{'search_default_group_by_status': 1}</field>
+    </record>
+
+    <record id="action_document_report_type" model="ir.actions.act_window">
+        <field name="name">Documents by Type</field>
+        <field name="res_model">document.tracker</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_document_tracker_search"/>
+        <field name="context">{'search_default_group_by_type': 1}</field>
+    </record>
+
+    <record id="action_document_report_responsible" model="ir.actions.act_window">
+        <field name="name">Documents by Responsible</field>
+        <field name="res_model">document.tracker</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_document_tracker_search"/>
+        <field name="context">{'search_default_group_by_responsible': 1}</field>
+    </record>
+
+    <!-- Ready-made filters -->
+    <record id="action_document_expired" model="ir.actions.act_window">
+        <field name="name">Expired Documents</field>
+        <field name="res_model">document.tracker</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_document_tracker_search"/>
+        <field name="context">{'search_default_expired': 1}</field>
+    </record>
+
+    <record id="action_document_expiring" model="ir.actions.act_window">
+        <field name="name">Expiring Soon</field>
+        <field name="res_model">document.tracker</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_document_tracker_search"/>
+        <field name="context">{'search_default_filter_expiring': 1}</field>
+    </record>
+
+    <record id="action_document_active" model="ir.actions.act_window">
+        <field name="name">Active Documents</field>
+        <field name="res_model">document.tracker</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_document_tracker_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+    </record>
+
+</odoo>

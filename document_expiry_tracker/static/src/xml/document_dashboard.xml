@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="document_expiry_tracker.Dashboard">
+        <div class="o_document_dashboard h-100 overflow-auto p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="m-0">Document Dashboard</h2>
+                <button class="btn btn-secondary" t-on-click="refresh">
+                    <i class="fa fa-refresh me-1"/> Refresh
+                </button>
+            </div>
+
+            <!-- Document KPIs -->
+            <h5 class="text-muted mb-3">Documents</h5>
+            <div class="row g-3 mb-4">
+                <t t-foreach="state.data.document_kpis" t-as="kpi" t-key="kpi.label">
+                    <div class="col-6 col-lg-3">
+                        <div t-attf-class="o_dashboard_card card h-100 border-start border-4 border-#{kpi.color}"
+                             t-on-click="() => this.openItem(kpi)">
+                            <div class="card-body">
+                                <div class="text-muted" t-esc="kpi.label"/>
+                                <div t-attf-class="display-5 fw-bold text-#{kpi.color}"
+                                     t-esc="kpi.count"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+            <!-- Renewal KPIs -->
+            <h5 class="text-muted mb-3">Renewal Requests</h5>
+            <div class="row g-3 mb-4">
+                <t t-foreach="state.data.renewal_kpis" t-as="kpi" t-key="kpi.label">
+                    <div class="col-12 col-md-4">
+                        <div t-attf-class="o_dashboard_card card h-100 border-start border-4 border-#{kpi.color}"
+                             t-on-click="() => this.openItem(kpi)">
+                            <div class="card-body">
+                                <div class="text-muted" t-esc="kpi.label"/>
+                                <div t-attf-class="display-5 fw-bold text-#{kpi.color}"
+                                     t-esc="kpi.count"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+            <!-- Charts -->
+            <div class="row g-3">
+
+                <div class="col-12 col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="mb-3">Documents by Status</h5>
+                            <t t-foreach="state.data.by_status" t-as="item" t-key="item.label">
+                                <div class="o_dashboard_bar mb-3"
+                                     t-on-click="() => this.openItem(item)">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span t-esc="item.label"/>
+                                        <strong t-esc="item.count"/>
+                                    </div>
+                                    <div class="progress">
+                                        <div t-attf-class="progress-bar bg-#{item.color}"
+                                             role="progressbar"
+                                             t-attf-style="width: #{item.pct}%"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="mb-3">Documents by Type</h5>
+                            <div t-if="!state.data.by_type.length" class="text-muted">
+                                No documents yet.
+                            </div>
+                            <t t-foreach="state.data.by_type" t-as="item" t-key="item.label">
+                                <div class="o_dashboard_bar mb-3"
+                                     t-on-click="() => this.openItem(item)">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span t-esc="item.label"/>
+                                        <strong t-esc="item.count"/>
+                                    </div>
+                                    <div class="progress">
+                                        <div t-attf-class="progress-bar bg-#{item.color}"
+                                             role="progressbar"
+                                             t-attf-style="width: #{item.pct}%"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </t>
+
+</templates>

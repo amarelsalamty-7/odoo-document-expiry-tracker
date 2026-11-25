@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Search & Filters for Documents -->
+    <record id="view_document_tracker_search_filters" model="ir.ui.view">
+        <field name="name">document.tracker.search.filters</field>
+        <field name="model">document.tracker</field>
+        <field name="inherit_id" ref="view_document_tracker_search"/>
+        <field name="arch" type="xml">
+
+            <!-- One box: search by document name OR document number -->
+            <field name="name" position="replace">
+                <field name="name"
+                       string="Name / Number"
+                       filter_domain="['|',
+                                      ('name', 'ilike', self),
+                                      ('document_number', 'ilike', self)]"/>
+            </field>
+
+            <!-- Status filters (based on the real expiry date) -->
+            <filter name="expired" position="replace">
+                <filter name="filter_active"
+                        string="Active"
+                        domain="[('expiry_date', '&gt;',
+                                 (context_today() + relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+
+                <filter name="filter_expiring"
+                        string="Expiring Soon"
+                        domain="[('expiry_date', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                                 ('expiry_date', '&lt;=',
+                                 (context_today() + relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+
+                <filter name="expired"
+                        string="Expired"
+                        domain="[('expiry_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+
+                <separator/>
+
+                <filter name="my_documents"
+                        string="My Documents"
+                        domain="[('responsible_id', '=', uid)]"/>
+            </filter>
+
+            <!-- Extra grouping options -->
+            <filter name="group_by_company" position="after">
+                <filter name="group_by_status"
+                        string="Status"
+                        context="{'group_by': 'status'}"/>
+                <filter name="group_by_expiry_month"
+                        string="Expiry Month"
+                        context="{'group_by': 'expiry_date:month'}"/>
+            </filter>
+
+        </field>
+    </record>
+
+</odoo>
